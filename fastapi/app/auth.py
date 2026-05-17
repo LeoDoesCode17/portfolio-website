@@ -15,7 +15,7 @@ from app.core.config import settings
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
 
 def authenticate_user(db: Session, username: str, password: str):
-    user = user_repository.get_by_username()
+    user = user_repository.get_by_username(db, username)
     if not user:
         verify_user_password(password, DUMMY_HASH)
         return None
