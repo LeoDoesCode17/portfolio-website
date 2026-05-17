@@ -7,8 +7,11 @@ class Settings(BaseSettings):
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
     DUMMY_PASSWORD: str
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
+    POSTGRES_DB: str
 
     class Config:
-        env_file=Path(__file__).resolve().parent.parent.parent / ".env"
+        env_file=Path(__file__).resolve().parent.parent.parent.parent / ".env"
 
 settings = Settings()
