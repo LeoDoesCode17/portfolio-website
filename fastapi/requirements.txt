@@ -1,0 +1,4 @@
+# /fastapi/requirements.txt
+fastapi[standard]
+uvicorn[standard]
+python-dotenv
