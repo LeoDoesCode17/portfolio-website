@@ -1,0 +1,1 @@
+# Command bertambah untuk migrate semua table dengan alembic
