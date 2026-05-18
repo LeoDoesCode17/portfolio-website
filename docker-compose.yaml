@@ -25,5 +25,21 @@ services:
       postgres:
         condition: service_healthy
 
+  admin:
+    build:
+      context: ./admin
+      target: development
+    restart: unless-stopped
+    ports: 
+      - "3001:300d1"
+    volumes:
+      - ./admin:/app
+      - /app/node_modules
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - API_URL=http://fastapi:8000 
+    depends_on:
+      - fastapi
+
 volumes:
   pgdata:
