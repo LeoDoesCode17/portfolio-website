@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
+    ALLOWED_ORIGINS: list[str]
 
     class Config:
         env_file=Path(__file__).resolve().parent.parent.parent.parent / ".env"
