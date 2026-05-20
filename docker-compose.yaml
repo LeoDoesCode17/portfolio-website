@@ -31,7 +31,7 @@ services:
       target: development
     restart: unless-stopped
     ports: 
-      - "3001:300d1"
+      - "3001:3001"
     volumes:
       - ./admin:/app
       - /app/node_modules
