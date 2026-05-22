@@ -12,3 +12,5 @@ class ImageCreate(BaseModel):
     url: str
     alt_text: str
 
+class ImageUpdate(ImageCreate):
+    pass
