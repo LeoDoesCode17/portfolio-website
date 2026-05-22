@@ -15,6 +15,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 # ── Import your Base and ALL models ───────────────────────────────────────────
 from app.core.database import Base
 from app.models.user import User          # ← import every model here
+from app.models.image import Image          # ← import every model here
 from app.core.config import settings      # ← loads DATABASE_URL from .env
 
 # this is the Alembic Config object, which provides
