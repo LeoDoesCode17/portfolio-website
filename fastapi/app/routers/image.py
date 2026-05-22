@@ -1,6 +1,12 @@
-# fastapi/app/routers/image.py
-from fastapi import APIRouter
-from app.schemas.image import ImageResponse, ImageCreate
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.orm import Session
+from app.core.database import get_db
+from app.schemas.user import UserResponse
+from typing import Annotated
+from app.auth import get_current_user
+
+from app.schemas.image import ImageResponse, ImageCreate, ImageUpdate, ImageDelete
+from app.repositories import image as repository
 
 router = APIRouter(
     prefix='/images',
@@ -8,23 +14,38 @@ router = APIRouter(
 )
 
 @router.get('/', response_model=list[ImageResponse])
-async def read_all_images():
-    return [
-        {
-            'id': 1,
-            'name': 'Leonardo Image',
-            'url': 'Leonardo-ulr.url',
-            'alt_text': 'This is the alt text'
-        }
-    ]
+def read_all_images(db: Session = Depends(get_db)):
+    return repository.get(db)
 
-@router.post('/', response_model=ImageResponse)
-async def create_an_image(image: ImageCreate):
-    return {
-        'id': 1,
-        'name': image.name,
-        'url': image.url,
-        'alt_text': image.alt_text
-    }
+@router.post('/', response_model=ImageResponse, status_code=status.HTTP_201_CREATED)
+def create_an_image(
+    image: ImageCreate,
+    current_user: Annotated[UserResponse, Depends(get_current_user)],
+    db: Session = Depends(get_db)
+):
+    return repository.create(db, image.model_dump())
 
+@router.get("/{id}", response_model=ImageResponse)
+def get_an_image(
+    id: int,
+    current_user: Annotated[UserResponse, Depends(get_current_user)],
+    db: Session = Depends(get_db),
+):
+    return repository.get_by_id(db, id)
 
+@router.patch('/{id}', response_model=ImageResponse)
+def update_an_image(
+    id: int,
+    image: ImageUpdate,
+    current_user: Annotated[UserResponse, Depends(get_current_user)],
+    db: Session = Depends(get_db)
+):
+    return repository.update(db, id, image.model_dump(exclude_unset=True))
+
+@router.delete('/{id}', response_model=ImageDelete)
+def delete_an_image(
+    id: int,
+    current_user: Annotated[UserResponse, Depends(get_current_user)],
+    db: Session = Depends(get_db)
+):
+    return repository.delete(db, id)
