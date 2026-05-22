@@ -56,3 +56,27 @@ def update(db: Session, id: int, data: dict) -> Image:
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to update image with id {id}"
         )
+    
+def delete(db: Session, id: int):
+    image_instance = db.query(Image).filter(
+        Image.id == id,
+        Image.is_deleted == False
+    ).first()
+
+    if not image_instance:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Image with id {id} not found"            
+        )
+    
+    try:
+        image_instance.is_deleted = True
+        db.commit()
+        db.refresh(image_instance)
+        return image_instance
+    except SQLAlchemyError:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to delete image with id {id}"
+        )
