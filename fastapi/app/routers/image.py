@@ -25,6 +25,14 @@ def create_an_image(
 ):
     return repository.create(db, image.model_dump())
 
+@router.get("/{id}", response_model=ImageResponse)
+def get_an_image(
+    id: int,
+    current_user: Annotated[UserResponse, Depends(get_current_user)],
+    db: Session = Depends(get_db),
+):
+    return repository.get_by_id(db, id)
+
 @router.patch('/{id}', response_model=ImageResponse)
 def update_an_image(
     id: int,
