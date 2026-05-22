@@ -11,6 +11,28 @@ def get(db: Session) -> list[Image]:
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to retrieve images"
         )
+    
+def get_by_id(db: Session, id: int) -> Image:
+    try:
+        image_instance = (
+            db.query(Image)
+            .filter(Image.id == id, Image.is_deleted == False)
+            .first()
+        )
+    except SQLAlchemyError:
+        # Error while querying the DB (connection lost, etc.)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve image with id {id}",
+        )
+
+    if not image_instance:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Image with id {id} not found",
+        )
+
+    return image_instance
 
 def create(db: Session, data: dict) -> Image:
     try:
