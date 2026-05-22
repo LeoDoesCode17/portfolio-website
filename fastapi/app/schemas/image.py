@@ -14,3 +14,6 @@ class ImageCreate(BaseModel):
 
 class ImageUpdate(ImageCreate):
     pass
+
+class ImageDelete(BaseModel):
+    name: str
