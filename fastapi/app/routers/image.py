@@ -4,7 +4,7 @@ from app.core.database import get_db
 from app.schemas.user import UserResponse
 from typing import Annotated
 from app.auth import get_current_user
-from app.schemas.image import ImageResponse, ImageCreate
+from app.schemas.image import ImageResponse, ImageCreate, ImageUpdate
 from app.repositories import image as repository
 
 router = APIRouter(
@@ -23,3 +23,12 @@ def create_an_image(
     db: Session = Depends(get_db)
 ):
     return repository.create(db, image.model_dump())
+
+@router.patch('/{id}', response_model=ImageResponse)
+def update_an_image(
+    id: int,
+    image: ImageUpdate,
+    current_user: Annotated[UserResponse, Depends(get_current_user)],
+    db: Session = Depends(get_db)
+):
+    return repository.update(db, id, image.model_dump(exclude_unset=True))
