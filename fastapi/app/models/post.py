@@ -2,8 +2,12 @@
 
 from app.core.database import Base
 from sqlalchemy import Integer, Boolean, Text, DateTime, func
-from sqlalchemy.orm import mapped_column, Mapped
+from sqlalchemy.orm import mapped_column, Mapped, relationship
 from datetime import datetime
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.models.post_tech import PostTech
 
 class Post(Base):
     __tablename__ = 'posts'
@@ -25,3 +29,10 @@ class Post(Base):
         nullable=False 
     )
     is_deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+
+    # Relationship
+    post_techs: Mapped[list["PostTech"]] = relationship(
+        "PostTech",
+        back_populates="post",
+        primaryjoin="and_(Post.id == PostTech.post_id, PostTech.is_deleted == False)"
+    )
