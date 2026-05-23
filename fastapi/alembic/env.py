@@ -18,6 +18,7 @@ from app.models.user import User          # ← import every model here
 from app.models.image import Image          # ← import every model here
 from app.models.tech import Tech
 from app.models.post import Post
+from app.models.post_tech import PostTech
 from app.core.config import settings      # ← loads DATABASE_URL from .env
 
 # this is the Alembic Config object, which provides
