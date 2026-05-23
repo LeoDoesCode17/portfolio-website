@@ -1,7 +1,7 @@
 # fasapi/app/models/post_tech.py
 
 from app.core.database import Base
-from sqlalchemy import Integer, Text, Boolean, ForeignKey
+from sqlalchemy import Integer, Text, Boolean, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from typing import TYPE_CHECKING
 
@@ -12,6 +12,13 @@ if TYPE_CHECKING:
 
 class PostTech(Base):
     __tablename__ = 'post_techs'
+    __table_args__ = (
+        UniqueConstraint(
+            "post_id",
+            "tech_id",
+            name="uq_post_tech_post_id_tech_id"
+        ),
+    )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     post_id: Mapped[int] = mapped_column(Integer, ForeignKey('posts.id'), nullable=False)
