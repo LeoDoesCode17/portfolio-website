@@ -29,6 +29,7 @@ class Post(Base):
         onupdate=func.now(),
         nullable=False 
     )
+    is_published: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     is_deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     # Relationships
@@ -40,5 +41,5 @@ class Post(Base):
     post_sections: Mapped[list["PostSection"]] = relationship(
         "PostSection",
         back_populates="post",
-        primaryjoin="and_(Post.id == PostSection.post_id, PostSectin.is_deleted == False)"
+        primaryjoin="and_(Post.id == PostSection.post_id, PostSection.is_deleted == False)"
     )
