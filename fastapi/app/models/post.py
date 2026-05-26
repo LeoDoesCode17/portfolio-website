@@ -41,5 +41,5 @@ class Post(Base):
     post_sections: Mapped[list["PostSection"]] = relationship(
         "PostSection",
         back_populates="post",
-        primaryjoin="and_(Post.id == PostSection.post_id, PostSectin.is_deleted == False)"
+        primaryjoin="and_(Post.id == PostSection.post_id, PostSection.is_deleted == False)"
     )
