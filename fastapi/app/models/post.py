@@ -29,6 +29,7 @@ class Post(Base):
         onupdate=func.now(),
         nullable=False 
     )
+    is_published: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     is_deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     # Relationships
