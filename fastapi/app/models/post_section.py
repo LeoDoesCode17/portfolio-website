@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from app.models.post import Post
-    from app.models.post_section_image import PostSectionImage
+    from app.models.image import Image
 
 class PostSection(Base):
     __tablename__ = 'post_sections'
@@ -24,4 +24,11 @@ class PostSection(Base):
     post: Mapped["Post"] = relationship(
         "Post",
         back_populates="sections",
+    )
+
+    # One-to-many with Image
+    images: Mapped[list["Image"]] = relationship(
+        "Image",
+        back_populates="post_section",
+        primaryjoin="and_(PostSection.id == Image.post_section_id, Image.is_deleted == False)"
     )
