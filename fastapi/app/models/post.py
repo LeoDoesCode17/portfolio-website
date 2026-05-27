@@ -50,8 +50,10 @@ class Post(Base):
         viewonly=True,
     )
 
-    post_sections: Mapped[list["PostSection"]] = relationship(
+    # ── One-to-many with PostSection ──
+    sections: Mapped[list["PostSection"]] = relationship(
         "PostSection",
         back_populates="post",
-        primaryjoin="and_(Post.id == PostSection.post_id, PostSection.is_deleted == False)"
+        primaryjoin="and_(Post.id == PostSection.post_id, PostSection.is_deleted == False)",
+        # order_by="PostSection.order_index",
     )
