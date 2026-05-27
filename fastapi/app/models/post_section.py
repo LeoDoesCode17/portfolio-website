@@ -20,10 +20,8 @@ class PostSection(Base):
     content_md: Mapped[str] = mapped_column(Text, nullable=False)
     is_deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)    
 
-    # Relationships
-    post: Mapped["Post"] = relationship("Post", back_populates="post_sections")
-    post_section_images: Mapped[list["PostSectionImage"]] = relationship(
-        "PostSectionImage",
-        back_populates="post_section",
-        primaryjoin="and_(PostSection.id == PostSectionImage.post_section_id, PostSectionImage.is_deleted == False)"
+    # One PostSection → one Post
+    post: Mapped["Post"] = relationship(
+        "Post",
+        back_populates="sections",
     )
