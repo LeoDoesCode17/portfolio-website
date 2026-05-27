@@ -3,11 +3,13 @@
 from app.core.database import Base
 from sqlalchemy import Integer, String, Boolean, Text
 from sqlalchemy.orm import mapped_column, Mapped, relationship
-from typing import TYPE_CHECKING
+from app.models.post_tech import PostTech
+from app.models.post import Post
 
-if TYPE_CHECKING:
-    from app.models.post_tech import PostTech
-    from app.models.post import Post
+# from typing import TYPE_CHECKING
+# if TYPE_CHECKING:
+#     from app.models.post_tech import PostTech
+#     from app.models.post import Post
 
 class Tech(Base):
     __tablename__ = 'techs'
