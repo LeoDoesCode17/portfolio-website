@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from app.models.post_tech import PostTech
+    from app.models.tech import Tech
     from app.models.post_section import PostSection
 
 class Post(Base):
@@ -32,14 +33,27 @@ class Post(Base):
     is_published: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     is_deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
-    # Relationships
+    # Relationship with tech via post_tech
+    # Raw junction rows (internal)
     post_techs: Mapped[list["PostTech"]] = relationship(
         "PostTech",
         back_populates="post",
-        primaryjoin="and_(Post.id == PostTech.post_id, PostTech.is_deleted == False)"
+        primaryjoin="and_(Post.id == PostTech.post_id, PostTech.is_deleted == False)",
+        viewonly=True   
     )
-    post_sections: Mapped[list["PostSection"]] = relationship(
+    # Direct many-to-many to Tech
+    techs: Mapped[list["Tech"]] = relationship(
+        "Tech",
+        secondary="post_techs",
+        primaryjoin="and_(Post.id == PostTech.post_id, PostTech.is_deleted == False)",
+        secondaryjoin="and_(Tech.id == PostTech.tech_id, Tech.is_deleted == False)",
+        viewonly=True,
+    )
+
+    # ── One-to-many with PostSection ──
+    sections: Mapped[list["PostSection"]] = relationship(
         "PostSection",
         back_populates="post",
-        primaryjoin="and_(Post.id == PostSection.post_id, PostSection.is_deleted == False)"
+        primaryjoin="and_(Post.id == PostSection.post_id, PostSection.is_deleted == False)",
+        # order_by="PostSection.order_index",
     )

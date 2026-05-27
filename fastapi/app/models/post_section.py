@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from app.models.post import Post
-    from app.models.post_section_image import PostSectionImage
+    from app.models.image import Image
 
 class PostSection(Base):
     __tablename__ = 'post_sections'
@@ -20,10 +20,15 @@ class PostSection(Base):
     content_md: Mapped[str] = mapped_column(Text, nullable=False)
     is_deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)    
 
-    # Relationships
-    post: Mapped["Post"] = relationship("Post", back_populates="post_sections")
-    post_section_images: Mapped[list["PostSectionImage"]] = relationship(
-        "PostSectionImage",
+    # One PostSection → one Post
+    post: Mapped["Post"] = relationship(
+        "Post",
+        back_populates="sections",
+    )
+
+    # One-to-many with Image
+    images: Mapped[list["Image"]] = relationship(
+        "Image",
         back_populates="post_section",
-        primaryjoin="and_(PostSection.id == PostSectionImage.post_section_id, PostSectionImage.is_deleted == False)"
+        primaryjoin="and_(PostSection.id == Image.post_section_id, Image.is_deleted == False)"
     )

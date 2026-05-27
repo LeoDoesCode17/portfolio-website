@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from app.models.post_tech import PostTech
+    from app.models.post import Post
 
 class Tech(Base):
     __tablename__ = 'techs'
@@ -15,9 +16,18 @@ class Tech(Base):
     slug: Mapped[str] = mapped_column(Text, nullable=False, unique=True)
     is_deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
-    # Relationship
+    # Relationship with post via post_tech
+    # Raw junction rows (internal)
     post_techs: Mapped[list["PostTech"]] = relationship(
         "PostTech",
         back_populates="tech",
         primaryjoin="and_(Tech.id == PostTech.tech_id, PostTech.is_deleted == False)"
+    )
+    # Direct many-to-many to Post
+    posts: Mapped[list["Post"]] = relationship(
+        "Post",
+        secondary="post_techs",
+        primaryjoin="and_(Tech.id == PostTech.tech_id, PostTech.is_deleted == False)",
+        secondaryjoin="and_(Post.id == PostTech.post_id, Post.is_deleted == False)",
+        viewonly=True
     )
