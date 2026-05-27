@@ -3,10 +3,11 @@
 from app.core.database import Base
 from sqlalchemy import Integer, String, Boolean, Text, ForeignKey
 from sqlalchemy.orm import mapped_column, Mapped, relationship
-from typing import TYPE_CHECKING
+from app.models.post_section import PostSection
 
-if TYPE_CHECKING:
-    from app.models.post_section import PostSection
+# from typing import TYPE_CHECKING
+# if TYPE_CHECKING:
+#     from app.models.post_section import PostSection
 
 class Image(Base): 
     __tablename__ = 'images'
