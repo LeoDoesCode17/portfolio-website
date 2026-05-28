@@ -80,7 +80,11 @@ def update(db: Session, id: int, data: dict) -> Post:
         )
     
     try:
-        pass
+        for key, value in data.items():
+            setattr(post, key, value)
+        db.commit()
+        db.refresh(post)
+        return post        
     except IntegrityError as err_integrity:
         db.rollback()
         raise HTTPException(
