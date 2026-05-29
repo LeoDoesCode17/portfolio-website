@@ -1,3 +1,5 @@
+// app/page.tsx
+
 import { redirect } from "next/navigation";
 import { getAuthToken } from "@/lib/auth";
 
