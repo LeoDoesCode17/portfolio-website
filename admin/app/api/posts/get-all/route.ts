@@ -7,7 +7,8 @@ const LOCAL_DEV_URL = "http://127.0.0.1:8000"
 const FASTAPI_URL = process.env.API_URL ?? LOCAL_DEV_URL 
 const ENDPOINT = `${FASTAPI_URL}/posts/`
 
-export async function GET(req: NextRequest) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function GET(_req: NextRequest) {
     try {
         const res = await fetch(ENDPOINT, {
             method: "GET",
