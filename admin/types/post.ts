@@ -9,4 +9,5 @@ export interface Post {
     created_at: string;
     is_published: boolean;
     is_deleted: boolean;
+    demo_url: string | null
 }
