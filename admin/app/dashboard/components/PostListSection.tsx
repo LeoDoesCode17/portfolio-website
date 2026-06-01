@@ -3,12 +3,14 @@
 
 import { useEffect, useState } from "react";
 import type { Post } from "@/types/post";
+import { useRouter } from "next/navigation";
 
 export default function PostListSection() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const ROUTE_PATH = "/api/posts/get-all";
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,8 +41,9 @@ export default function PostListSection() {
 
   // Handlers are placeholders – you’ll add API calls later
   const handleEdit = (post: Post) => {
-    console.log("Edit post", post.id);
-    // TODO: navigate to edit page or open modal
+    const path = `/dashboard/posts/${post.slug}`
+    router.push(path)
+    // console.log("Path: ", path)
   };
 
   const handleTogglePublish = (post: Post) => {
