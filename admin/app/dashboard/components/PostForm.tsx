@@ -23,7 +23,6 @@ export default function PostForm({
   const [isPublished, setIsPublished] = useState(
     initialPost?.is_published ?? false
   );
-
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -38,7 +37,7 @@ export default function PostForm({
     setIsPublished(initialPost?.is_published ?? false);
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
     setIsSubmitted(true);
     setError(null);
@@ -47,7 +46,8 @@ export default function PostForm({
 
     try {
       if (mode === "create") {
-        const res = await fetch("/api/posts/create", {
+        const ROUTE = "/api/posts/create"
+        const res = await fetch(ROUTE, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -73,13 +73,47 @@ export default function PostForm({
         setSuccessMessage("Post created successfully");
         onSuccess?.(post);
         resetForm();
-        setIsSubmitted(false);
       } else {
-        // TODO: implement update via PATCH /api/posts/{id}
-        console.log("Update mode not implemented yet");
-        resetForm();
-        setIsSubmitted(false);
+        if (!initialPost) {
+          setError("Post doesn't exist")
+        } else {
+          // TODO: implement update via PATCH /api/posts/{id}
+          const ROUTE = `/api/posts/update?id=${initialPost.id}` // /api/posts/update/route.ts
+          const res = await fetch(ROUTE, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              title,
+              slug,
+              summary,
+              repo_url: repoUrl,
+              demo_url: demoUrl || null,
+              is_published: isPublished,
+            }),
+          })
+
+          if (!res.ok) {
+            const data = await res.json().catch(() => ({}));
+            setError((data as { error?: string }).error ?? "Update post failed");
+            setIsSubmitted(false);
+            return;
+          }
+
+          const post = (await res.json()) as Post;
+          setCreatedPost(post);
+          setSuccessMessage("Post updated successfully");
+          onSuccess?.(post);     
+          
+          // update form fields with latest post
+          setTitle(post.title);
+          setSlug(post.slug);
+          setSummary(post.summary);
+          setRepoUrl(post.repo_url ?? "");
+          setDemoUrl(post.demo_url ?? "");
+          setIsPublished(post.is_published ?? false);
+        }
       }
+        setIsSubmitted(false);
     } catch (e) {
       setError(`Unexpected error: ${e}`);
       resetForm();
