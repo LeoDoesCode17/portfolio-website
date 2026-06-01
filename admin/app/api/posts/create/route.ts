@@ -39,7 +39,7 @@ export async function POST(_req: NextRequest) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`, // required by get_current_user
+                "Authorization": `Bearer ${token}`, // required by get_current_user
             },
             body: JSON.stringify({
                 title,
