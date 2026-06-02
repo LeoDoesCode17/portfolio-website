@@ -1,14 +1,22 @@
-// app/dashboard/posts/[slug]/page.tsx
-import PostForm from "@/app/dashboard/components/PostForm";
-import type { Post } from "@/types/post";
+// app/dashboard/posts/post-sections/[slug]/page.tsx
+
+import { Post } from "@/types/post";
+import PostSectionsClient from "@/app/dashboard/components/PostSectionsClient";
 
 const LOCAL_DEV_URL = "http://127.0.0.1:8000";
 const FASTAPI_URL = process.env.API_URL ?? LOCAL_DEV_URL;
 
+/*
+TODO:
+- display post data that is fetched from get post by slug
+- display all post sections from this post
+- provide button to add new section
+- modal form to add new section
+- card status to display created status
+*/
+
 async function getPostBySlug(slug: string): Promise<Post | null> {
   const res = await fetch(`${FASTAPI_URL}/posts/slug/${slug}`, {
-    // Server component fetch; cookies not needed because backend route
-    // may or may not require auth. If it does, you can add Authorization later.
     next: { revalidate: 0 }, // always fresh in admin
   });
 
@@ -20,7 +28,7 @@ async function getPostBySlug(slug: string): Promise<Post | null> {
   return data;
 }
 
-export default async function EditPostPage({
+export default async function PostSectionsPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -36,12 +44,5 @@ export default async function EditPostPage({
     );
   }
 
-  return (
-    <div>
-      <h2 className="text-sm font-semibold text-slate-300">
-        Edit post: <span className="font-mono text-slate-100">{post.slug}</span>
-      </h2>
-      <PostForm mode="edit" initialPost={post} />
-    </div>
-  );
+  return <PostSectionsClient post={post} />;
 }

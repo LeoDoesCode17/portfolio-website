@@ -3,13 +3,14 @@
 
 import { usePathname, useRouter } from "next/navigation";
 
-type ItemKey = "all" | "published" | "create" | "deleted";
+type ItemKey = "all" | "published" | "create" | "deleted" | "add-post-section";
 
 const items: { key: ItemKey; label: string; href: string }[] = [
   { key: "all",       label: "All posts",       href: "/dashboard" },
   { key: "published", label: "Published posts", href: "/dashboard/published" },
   { key: "create",    label: "Create new post", href: "/dashboard/create" },
   { key: "deleted",   label: "Deleted posts",   href: "/dashboard/deleted" },
+  { key: "add-post-section",   label: "Add post section",   href: "/dashboard/add-post-section" },
 ];
 
 export default function Sidebar() {
