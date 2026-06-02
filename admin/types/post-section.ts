@@ -9,3 +9,14 @@ export interface PostSection {
   content_md: string;
   is_deleted: boolean;
 }
+
+
+export const POST_SECTION_KEYS = [
+  "intro",
+  "tech_stack",
+  "implementation",
+  "challenges",
+  "conclusion",
+] as const;
+
+export type PostSectionKey = (typeof POST_SECTION_KEYS)[number];
